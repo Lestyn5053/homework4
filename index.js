@@ -24,6 +24,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     socket.on('database entry', msg => {
+        console.log(msg);
         app.post('/users', async (req, res) => {
             // req.body = '{ "name": ' + msg + ' }';
             await doActionThatMightFailValidation(req, res, async () => {
