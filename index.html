@@ -12,32 +12,39 @@
 <body>
   <h1 class="text-center">Autofill Application</h1>
   <form id="form" action="">
-      <input class="form-control" type="text" id="name" name="name" placeholder="Name" autocomplete="off" />
+      <input class="form-control" id="input" placeholder="Name" autocomplete="off" />
       <button class="btn btn-primary mb-3">Submit</button>
   </form>
-<ul id="entries"></ul>
+  <ul id="entries"></ul>
   <script src="/socket.io/socket.io.js"></script>
   <script>
       var socket = io();
-      var entries = document.getElementById('entries');
+
       var form = document.getElementById('form');
-      var name = document.getElementById('name');
+      var input = document.getElementById('input');
+      var entries = document.getElementById('entries');
       form.addEventListener('submit', function(e) {
           e.preventDefault();
-          if (name.value) {
-              socket.emit('database entry', name.value);
-              name.value = '';
+          if (input.value) {
+              socket.emit('database entry', input.value);
+              input.value = '';
           }
       })
 
-      socket.on('get items', function(msg) {
+      input.addEventListener('input', () => {
+          socket.emit('query', input.value);
+      })
+
+      socket.on('query-result', function(msg) {
           var lis = entries.getElementsByTagName('li')
           while (lis.length > 0) {
-              entries.removeChild(lis[0])
+              entries.removeChild(lis[0]);
           }
-          var item = document.createElement('li');
-          item.textContent = msg;
-          entries.appendChild(item);
+          for (var i = 0; i < msg.length; i++) {
+              var item = document.createElement('li');
+              item.textContent = msg[i];
+              entries.appendChild(item);
+          }
       });
   </script>
 </body>
