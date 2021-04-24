@@ -16,6 +16,7 @@
       <button class="btn btn-primary mb-3">Submit</button>
   </form>
   <ul id="entries"></ul>
+  <p id="response"></p>
   <script src="/socket.io/socket.io.js"></script>
   <script>
       var socket = io();
@@ -23,6 +24,7 @@
       var form = document.getElementById('form');
       var input = document.getElementById('input');
       var entries = document.getElementById('entries');
+      var paragraphResponse = document.getElementById('response');
       form.addEventListener('submit', function(e) {
           e.preventDefault();
           if (input.value) {
@@ -46,6 +48,14 @@
               entries.appendChild(item);
           }
       });
+
+      socket.on('submit success', function(msg) {
+          paragraphResponse.textContent = 'Submission ' + msg + ' successful!';
+      });
+
+      socket.on('submit error', function() {
+          paragraphResponse.textContent = 'Error with submission. See log for details.';
+      })
   </script>
 </body>
 </html>
