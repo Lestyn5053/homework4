@@ -38,13 +38,13 @@
       })
 
       socket.on('query-result', function(msg) {
-          var lis = entries.getElementsByTagName('li')
+          const lis = entries.getElementsByTagName('li');
           while (lis.length > 0) {
               entries.removeChild(lis[0]);
           }
-          for (var i = 0; i < msg.length; i++) {
-              var item = document.createElement('li');
-              item.textContent = msg[i];
+          for (let i = 0; i < msg.length; i++) {
+              const item = document.createElement('li');
+              item.textContent = msg[i].Name;
               entries.appendChild(item);
           }
       });

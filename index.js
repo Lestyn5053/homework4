@@ -14,11 +14,11 @@ app.get('/', (req, res) => {
 });
 
 const postUser = async (data) => new User(data).save();
-const autoComplete = async (data) => User.find({ name: { $regex: data } });
+const autoComplete = async (data) => User.find({ Name: { $regex: data } });
 
 io.on('connection', (socket) => {
   socket.on('database entry', async (msg) => {
-    const data = { name: msg };
+    const data = { Name: msg };
     try {
       await postUser(data);
       socket.emit('submit success', msg);
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     const ac = await autoComplete(msg);
     const entries = [];
     ac.forEach((entry) => {
-      entries.push({ entry });
+      entries.push({ Name: entry.Name });
     });
     socket.emit('query-result', entries);
   });
