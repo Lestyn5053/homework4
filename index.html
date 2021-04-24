@@ -34,7 +34,7 @@
       })
 
       input.addEventListener('input', () => {
-          socket.emit('query', input.value);
+          socket.emit('autocomplete', input.value);
       })
 
       socket.on('query-result', function(msg) {
